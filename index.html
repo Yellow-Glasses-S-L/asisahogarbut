@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASISA Bot - Asistente de Seguros de Hogar</title>
+    <title>ASISA - Asistente de Seguros de Hogar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,9 +14,19 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --asisa-blue: #1e3a8a;
+            --asisa-blue-light: #3b5998;
+            --asisa-blue-dark: #152a5c;
+            --asisa-gray: #f5f7fa;
+            --asisa-gray-dark: #6b7280;
+            --asisa-white: #ffffff;
+            --asisa-border: #e5e7eb;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--asisa-gray);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,42 +36,75 @@
 
         .chat-container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             height: 90vh;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: var(--asisa-white);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(30, 58, 138, 0.15);
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
         .chat-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            text-align: center;
+            background: var(--asisa-blue);
+            color: var(--asisa-white);
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .chat-header-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .chat-header-content {
+            flex: 1;
         }
 
         .chat-header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 2px;
         }
 
         .chat-header p {
-            font-size: 14px;
+            font-size: 13px;
             opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .chat-header-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 24px;
             overflow-y: auto;
-            background: #f5f5f5;
+            background: var(--asisa-gray);
         }
 
         .message {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: flex;
             animation: slideIn 0.3s ease;
         }
@@ -80,70 +126,103 @@
 
         .message-content {
             max-width: 70%;
-            padding: 15px 20px;
-            border-radius: 18px;
+            padding: 14px 18px;
+            border-radius: 12px;
             word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         .message.user .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--asisa-blue);
+            color: var(--asisa-white);
             border-bottom-right-radius: 4px;
         }
 
         .message.bot .message-content {
-            background: white;
+            background: var(--asisa-white);
             color: #333;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             border-bottom-left-radius: 4px;
+            border: 1px solid var(--asisa-border);
         }
 
-        .message-info {
-            font-size: 11px;
-            margin-top: 5px;
-            opacity: 0.7;
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 10px;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: var(--asisa-blue);
+            color: white;
+            order: -1;
+        }
+
+        .message.user .message-avatar {
+            background: var(--asisa-gray);
+            color: var(--asisa-blue);
+            border: 2px solid var(--asisa-blue);
         }
 
         .chat-input-container {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
+            padding: 20px 24px;
+            background: var(--asisa-white);
+            border-top: 1px solid var(--asisa-border);
         }
 
         .chat-input-wrapper {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .chat-input {
             flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            font-size: 15px;
+            padding: 14px 20px;
+            border: 2px solid var(--asisa-border);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
             outline: none;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .chat-input:focus {
-            border-color: #667eea;
+            border-color: var(--asisa-blue);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .chat-input::placeholder {
+            color: var(--asisa-gray-dark);
         }
 
         .send-button {
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            padding: 14px 28px;
+            background: var(--asisa-blue);
+            color: var(--asisa-white);
             border: none;
-            border-radius: 25px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .send-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: var(--asisa-blue-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
         }
 
         .send-button:disabled {
@@ -151,17 +230,25 @@
             cursor: not-allowed;
         }
 
+        .send-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
         .typing-indicator {
             display: none;
-            padding: 15px 20px;
-            background: white;
-            border-radius: 18px;
+            padding: 14px 18px;
+            background: var(--asisa-white);
+            border-radius: 12px;
             width: fit-content;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--asisa-border);
         }
 
         .typing-indicator.active {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .typing-indicator span {
@@ -169,8 +256,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #667eea;
-            margin: 0 2px;
+            background: var(--asisa-blue);
             animation: bounce 1.4s infinite;
         }
 
@@ -187,30 +273,35 @@
                 transform: translateY(0);
             }
             30% {
-                transform: translateY(-10px);
+                transform: translateY(-8px);
             }
         }
 
         .error-message {
-            background: #ff4444;
-            color: white;
-            padding: 10px;
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 12px 16px;
             border-radius: 8px;
-            margin: 10px 20px;
+            margin: 10px 24px;
             text-align: center;
+            font-size: 13px;
+            border: 1px solid #fecaca;
             animation: slideIn 0.3s ease;
         }
 
         .quick-questions {
-            padding: 15px 20px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
+            padding: 16px 24px;
+            background: var(--asisa-white);
+            border-top: 1px solid var(--asisa-border);
         }
 
         .quick-questions h3 {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--asisa-gray-dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .quick-questions-list {
@@ -220,18 +311,21 @@
         }
 
         .quick-question {
-            padding: 8px 15px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 15px;
+            padding: 8px 16px;
+            background: var(--asisa-gray);
+            border: 1px solid var(--asisa-border);
+            border-radius: 20px;
             font-size: 13px;
+            font-family: inherit;
             cursor: pointer;
             transition: all 0.2s;
+            color: var(--asisa-blue);
         }
 
         .quick-question:hover {
-            background: #667eea;
-            color: white;
+            background: var(--asisa-blue);
+            color: var(--asisa-white);
+            border-color: var(--asisa-blue);
         }
 
         /* Scrollbar styling */
@@ -240,46 +334,139 @@
         }
 
         .chat-messages::-webkit-scrollbar-track {
-            background: #f5f5f5;
+            background: var(--asisa-gray);
         }
 
         .chat-messages::-webkit-scrollbar-thumb {
-            background: #667eea;
+            background: var(--asisa-blue);
             border-radius: 3px;
         }
 
+        /* Contact info bar */
+        .contact-bar {
+            background: var(--asisa-blue-dark);
+            color: var(--asisa-white);
+            padding: 8px 24px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .contact-bar a {
+            color: var(--asisa-white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0.9;
+        }
+
+        .contact-bar a:hover {
+            opacity: 1;
+        }
+
+        .contact-bar svg {
+            width: 14px;
+            height: 14px;
+        }
+
         @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+
             .chat-container {
                 height: 100vh;
                 border-radius: 0;
+                max-width: 100%;
             }
 
             .message-content {
                 max-width: 85%;
+            }
+
+            .chat-header {
+                padding: 16px 20px;
+            }
+
+            .chat-messages {
+                padding: 16px;
+            }
+
+            .quick-questions {
+                padding: 12px 16px;
+            }
+
+            .chat-input-container {
+                padding: 16px;
+            }
+
+            .contact-bar {
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 8px 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
+        <div class="contact-bar">
+            <a href="tel:919911999">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                919 911 999
+            </a>
+            <a href="tel:900922992">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                900 922 992
+            </a>
+            <a href="mailto:asisa.informacion@asisa.es">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                asisa.informacion@asisa.es
+            </a>
+        </div>
+
         <div class="chat-header">
-            <h1>🏠 ASISA Bot</h1>
-            <p>Asistente de Seguros de Hogar</p>
+            <svg class="chat-header-logo" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- ASISA Logo Text -->
+                <text x="0" y="28" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white">asisa</text>
+                <!-- Plus/Cross symbol -->
+                <rect x="85" y="8" width="4" height="24" fill="#4A90D9"/>
+                <rect x="79" y="14" width="16" height="4" fill="#4A90D9" transform="translate(0, 4)"/>
+            </svg>
+            <div class="chat-header-content">
+                <h1>Atención al Cliente - Hogar</h1>
+                <p>Asistente virtual de seguros de hogar</p>
+            </div>
+            <div class="chat-header-status">
+                <span class="status-dot"></span>
+                <span>En línea</span>
+            </div>
         </div>
 
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
+                <div class="message-avatar">A</div>
                 <div class="message-content">
-                    ¡Hola! Soy el asistente de ASISA para seguros de hogar. Puedo ayudarte con información sobre nuestros productos: Casero, Inquilino y Propietario (versiones Básica y Completa). ¿En qué puedo ayudarte hoy?
+                    ¡Hola! Soy el asistente virtual de ASISA para seguros de hogar. Puedo ayudarte con información sobre nuestros productos: <strong>Casero</strong>, <strong>Inquilino</strong> y <strong>Propietario</strong> (versiones Básica y Completa).
+                    <br><br>
+                    ¿En qué puedo ayudarte hoy?
                 </div>
             </div>
         </div>
 
         <div class="quick-questions">
-            <h3>Preguntas frecuentes:</h3>
+            <h3>Preguntas frecuentes</h3>
             <div class="quick-questions-list">
                 <button class="quick-question" onclick="sendQuickQuestion('¿Qué productos de seguro de hogar hay?')">Productos disponibles</button>
-                <button class="quick-question" onclick="sendQuickQuestion('¿Qué cubre el seguro Casero Básico?')">Casero Básico</button>
+                <button class="quick-question" onclick="sendQuickQuestion('¿Qué cubre el seguro Casero Básico?')">Cobertura Casero</button>
                 <button class="quick-question" onclick="sendQuickQuestion('¿Cuál es la diferencia entre Inquilino y Propietario?')">Inquilino vs Propietario</button>
                 <button class="quick-question" onclick="sendQuickQuestion('¿Cómo tramitar un siniestro?')">Tramitar siniestro</button>
             </div>
@@ -295,14 +482,17 @@
                     onkeypress="handleKeyPress(event)"
                 >
                 <button class="send-button" id="sendButton" onclick="sendMessage()">
-                    Enviar
+                    <span>Enviar</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        const WEBHOOK_URL = 'https://webhook-processor-aeup-production.up.railway.app/webhook/asisa-chat';
+        const WEBHOOK_URL = 'https://primary-rckr-production.up.railway.app/webhook/asisa-chat';
         let conversationHistory = [];
 
         function addMessage(content, isUser) {
@@ -310,15 +500,37 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
 
+            if (!isUser) {
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar';
+                avatar.textContent = 'A';
+                messageDiv.appendChild(avatar);
+            }
+
             const messageContent = document.createElement('div');
             messageContent.className = 'message-content';
-            messageContent.innerHTML = content.replace(/\n/g, '<br>');
+            messageContent.innerHTML = formatMessage(content);
 
             messageDiv.appendChild(messageContent);
-            messagesContainer.appendChild(messageDiv);
 
-            // Scroll to bottom
+            if (isUser) {
+                const avatar = document.createElement('div');
+                avatar.className = 'message-avatar';
+                avatar.textContent = 'Tú';
+                messageDiv.appendChild(avatar);
+            }
+
+            messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function formatMessage(content) {
+            // Convert markdown-style formatting
+            return content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>')
+                .replace(/- /g, '• ');
         }
 
         function showTypingIndicator() {
@@ -326,6 +538,11 @@
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot';
             typingDiv.id = 'typingIndicator';
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'A';
+            typingDiv.appendChild(avatar);
 
             const typingContent = document.createElement('div');
             typingContent.className = 'typing-indicator active';
@@ -362,15 +579,12 @@
 
             if (!message) return;
 
-            // Disable input
             input.disabled = true;
             sendButton.disabled = true;
 
-            // Add user message
             addMessage(message, true);
             input.value = '';
 
-            // Show typing indicator
             showTypingIndicator();
 
             try {
@@ -391,19 +605,14 @@
 
                 const data = await response.json();
 
-                // Hide typing indicator
                 hideTypingIndicator();
-
-                // Add bot response
                 addMessage(data.response, false);
 
-                // Update conversation history
                 conversationHistory.push({
                     user: message,
                     bot: data.response
                 });
 
-                // Keep only last 5 exchanges
                 if (conversationHistory.length > 5) {
                     conversationHistory = conversationHistory.slice(-5);
                 }
@@ -413,7 +622,6 @@
                 console.error('Error:', error);
                 showError('Lo siento, hubo un error al procesar tu mensaje. Por favor intenta de nuevo.');
             } finally {
-                // Re-enable input
                 input.disabled = false;
                 sendButton.disabled = false;
                 input.focus();
@@ -432,7 +640,6 @@
             }
         }
 
-        // Focus input on load
         window.onload = () => {
             document.getElementById('messageInput').focus();
         };
