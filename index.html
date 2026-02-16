@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASISA - Asistente de Seguros de Hogar</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>ASISA Bot - Asistente Virtual</title>
     <style>
         * {
             margin: 0;
@@ -14,97 +11,99 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --asisa-blue: #1e3a8a;
-            --asisa-blue-light: #3b5998;
-            --asisa-blue-dark: #152a5c;
-            --asisa-gray: #f5f7fa;
-            --asisa-gray-dark: #6b7280;
-            --asisa-white: #ffffff;
-            --asisa-border: #e5e7eb;
-        }
-
         body {
-            font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--asisa-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        body.venta {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
 
         .chat-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 800px;
             height: 90vh;
-            background: var(--asisa-white);
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(30, 58, 138, 0.15);
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
         .chat-header {
-            background: var(--asisa-blue);
-            color: var(--asisa-white);
-            padding: 20px 30px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            text-align: center;
+            transition: background 0.5s ease;
         }
 
-        .chat-header-logo {
-            height: 40px;
-            width: auto;
-        }
-
-        .chat-header-content {
-            flex: 1;
+        .chat-header.venta {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
 
         .chat-header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 2px;
+            font-size: 24px;
+            margin-bottom: 5px;
         }
 
         .chat-header p {
-            font-size: 13px;
+            font-size: 14px;
             opacity: 0.9;
-            font-weight: 400;
+            margin-bottom: 15px;
         }
 
-        .chat-header-status {
+        /* Bot Selector */
+        .bot-selector {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
+        .bot-option {
+            padding: 10px 20px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 25px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .bot-option:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .bot-option.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+
+        .bot-option.active.venta-btn {
+            color: #11998e;
         }
 
         .chat-messages {
             flex: 1;
-            padding: 24px;
+            padding: 20px;
             overflow-y: auto;
-            background: var(--asisa-gray);
+            background: #f5f5f5;
         }
 
         .message {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
             animation: slideIn 0.3s ease;
         }
@@ -126,103 +125,86 @@
 
         .message-content {
             max-width: 70%;
-            padding: 14px 18px;
-            border-radius: 12px;
+            padding: 15px 20px;
+            border-radius: 18px;
             word-wrap: break-word;
-            font-size: 14px;
-            line-height: 1.5;
         }
 
         .message.user .message-content {
-            background: var(--asisa-blue);
-            color: var(--asisa-white);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border-bottom-right-radius: 4px;
         }
 
+        body.venta .message.user .message-content {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
         .message.bot .message-content {
-            background: var(--asisa-white);
+            background: white;
             color: #333;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             border-bottom-left-radius: 4px;
-            border: 1px solid var(--asisa-border);
         }
 
-        .message-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 0 10px;
-            flex-shrink: 0;
-        }
-
-        .message.bot .message-avatar {
-            background: var(--asisa-blue);
-            color: white;
-            order: -1;
-        }
-
-        .message.user .message-avatar {
-            background: var(--asisa-gray);
-            color: var(--asisa-blue);
-            border: 2px solid var(--asisa-blue);
+        .message-info {
+            font-size: 11px;
+            margin-top: 5px;
+            opacity: 0.7;
         }
 
         .chat-input-container {
-            padding: 20px 24px;
-            background: var(--asisa-white);
-            border-top: 1px solid var(--asisa-border);
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
         }
 
         .chat-input-wrapper {
             display: flex;
-            gap: 12px;
+            gap: 10px;
         }
 
         .chat-input {
             flex: 1;
-            padding: 14px 20px;
-            border: 2px solid var(--asisa-border);
-            border-radius: 12px;
-            font-size: 14px;
-            font-family: inherit;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 15px;
             outline: none;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.3s;
         }
 
         .chat-input:focus {
-            border-color: var(--asisa-blue);
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+            border-color: #667eea;
         }
 
-        .chat-input::placeholder {
-            color: var(--asisa-gray-dark);
+        body.venta .chat-input:focus {
+            border-color: #11998e;
         }
 
         .send-button {
-            padding: 14px 28px;
-            background: var(--asisa-blue);
-            color: var(--asisa-white);
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
-            font-family: inherit;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.5s;
+        }
+
+        body.venta .send-button {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
         }
 
         .send-button:hover:not(:disabled) {
-            background: var(--asisa-blue-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        body.venta .send-button:hover:not(:disabled) {
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
         }
 
         .send-button:disabled {
@@ -230,25 +212,17 @@
             cursor: not-allowed;
         }
 
-        .send-button svg {
-            width: 18px;
-            height: 18px;
-        }
-
         .typing-indicator {
             display: none;
-            padding: 14px 18px;
-            background: var(--asisa-white);
-            border-radius: 12px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 18px;
             width: fit-content;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border: 1px solid var(--asisa-border);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .typing-indicator.active {
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            display: block;
         }
 
         .typing-indicator span {
@@ -256,8 +230,13 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: var(--asisa-blue);
+            background: #667eea;
+            margin: 0 2px;
             animation: bounce 1.4s infinite;
+        }
+
+        body.venta .typing-indicator span {
+            background: #11998e;
         }
 
         .typing-indicator span:nth-child(2) {
@@ -273,35 +252,30 @@
                 transform: translateY(0);
             }
             30% {
-                transform: translateY(-8px);
+                transform: translateY(-10px);
             }
         }
 
         .error-message {
-            background: #fef2f2;
-            color: #dc2626;
-            padding: 12px 16px;
+            background: #ff4444;
+            color: white;
+            padding: 10px;
             border-radius: 8px;
-            margin: 10px 24px;
+            margin: 10px 20px;
             text-align: center;
-            font-size: 13px;
-            border: 1px solid #fecaca;
             animation: slideIn 0.3s ease;
         }
 
         .quick-questions {
-            padding: 16px 24px;
-            background: var(--asisa-white);
-            border-top: 1px solid var(--asisa-border);
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
         }
 
         .quick-questions h3 {
-            font-size: 12px;
-            color: var(--asisa-gray-dark);
-            margin-bottom: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
         }
 
         .quick-questions-list {
@@ -311,21 +285,22 @@
         }
 
         .quick-question {
-            padding: 8px 16px;
-            background: var(--asisa-gray);
-            border: 1px solid var(--asisa-border);
-            border-radius: 20px;
+            padding: 8px 15px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 15px;
             font-size: 13px;
-            font-family: inherit;
             cursor: pointer;
             transition: all 0.2s;
-            color: var(--asisa-blue);
         }
 
         .quick-question:hover {
-            background: var(--asisa-blue);
-            color: var(--asisa-white);
-            border-color: var(--asisa-blue);
+            background: #667eea;
+            color: white;
+        }
+
+        body.venta .quick-question:hover {
+            background: #11998e;
         }
 
         /* Scrollbar styling */
@@ -334,135 +309,89 @@
         }
 
         .chat-messages::-webkit-scrollbar-track {
-            background: var(--asisa-gray);
+            background: #f5f5f5;
         }
 
         .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--asisa-blue);
+            background: #667eea;
             border-radius: 3px;
         }
 
-        /* Contact info bar */
-        .contact-bar {
-            background: var(--asisa-blue-dark);
-            color: var(--asisa-white);
-            padding: 8px 24px;
-            font-size: 12px;
-            display: flex;
-            justify-content: center;
-            gap: 24px;
+        body.venta .chat-messages::-webkit-scrollbar-thumb {
+            background: #11998e;
         }
 
-        .contact-bar a {
-            color: var(--asisa-white);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            opacity: 0.9;
+        /* Bot badge */
+        .bot-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 5px;
         }
 
-        .contact-bar a:hover {
-            opacity: 1;
+        .bot-badge.hogar {
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
         }
 
-        .contact-bar svg {
-            width: 14px;
-            height: 14px;
+        .bot-badge.venta {
+            background: rgba(17, 153, 142, 0.2);
+            color: #11998e;
         }
 
         @media (max-width: 768px) {
-            body {
-                padding: 0;
-            }
-
             .chat-container {
                 height: 100vh;
                 border-radius: 0;
-                max-width: 100%;
             }
 
             .message-content {
                 max-width: 85%;
             }
 
-            .chat-header {
-                padding: 16px 20px;
+            .bot-selector {
+                flex-direction: column;
+                gap: 8px;
             }
 
-            .chat-messages {
-                padding: 16px;
-            }
-
-            .quick-questions {
-                padding: 12px 16px;
-            }
-
-            .chat-input-container {
-                padding: 16px;
-            }
-
-            .contact-bar {
-                flex-wrap: wrap;
-                gap: 12px;
-                padding: 8px 16px;
+            .bot-option {
+                padding: 8px 15px;
+                font-size: 13px;
             }
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
-        <div class="contact-bar">
-            <a href="tel:919911999">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                919 911 999
-            </a>
-            <a href="tel:900922992">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                900 922 992
-            </a>
-            <a href="mailto:asisa.informacion@asisa.es">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                asisa.informacion@asisa.es
-            </a>
-        </div>
+        <div class="chat-header" id="chatHeader">
+            <h1 id="botTitle">🏠 ASISA Hogar</h1>
+            <p id="botSubtitle">Asistente de Seguros de Hogar</p>
 
-        <div class="chat-header">
-            <img class="chat-header-logo" src="https://altfipmemhwesvxkujzv.supabase.co/storage/v1/object/public/assets/logo-asisa-vector.webp" alt="ASISA">
-            <div class="chat-header-content">
-                <h1>Atención al Cliente - Hogar</h1>
-                <p>Asistente virtual de seguros de hogar</p>
-            </div>
-            <div class="chat-header-status">
-                <span class="status-dot"></span>
-                <span>En línea</span>
+            <div class="bot-selector">
+                <button class="bot-option active" id="btnHogar" onclick="switchBot('hogar')">
+                    🏠 Bot Hogar
+                </button>
+                <button class="bot-option venta-btn" id="btnVenta" onclick="switchBot('venta')">
+                    💼 Bot Venta
+                </button>
             </div>
         </div>
 
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
-                <div class="message-avatar">A</div>
                 <div class="message-content">
-                    ¡Hola! Soy el asistente virtual de ASISA para seguros de hogar. Puedo ayudarte con información sobre nuestros productos: <strong>Casero</strong>, <strong>Inquilino</strong> y <strong>Propietario</strong> (versiones Básica y Completa).
-                    <br><br>
-                    ¿En qué puedo ayudarte hoy?
+                    <span class="bot-badge hogar">Bot Hogar</span><br>
+                    ¡Hola! Soy el asistente de ASISA para seguros de hogar. Puedo ayudarte con información sobre nuestros productos: Casero, Inquilino y Propietario (versiones Básica y Completa), así como criterios de tramitación. ¿En qué puedo ayudarte?
                 </div>
             </div>
         </div>
 
-        <div class="quick-questions">
-            <h3>Preguntas frecuentes</h3>
-            <div class="quick-questions-list">
-                <button class="quick-question" onclick="sendQuickQuestion('¿Qué productos de seguro de hogar hay?')">Productos disponibles</button>
-                <button class="quick-question" onclick="sendQuickQuestion('¿Qué cubre el seguro Casero Básico?')">Cobertura Casero</button>
-                <button class="quick-question" onclick="sendQuickQuestion('¿Cuál es la diferencia entre Inquilino y Propietario?')">Inquilino vs Propietario</button>
-                <button class="quick-question" onclick="sendQuickQuestion('¿Cómo tramitar un siniestro?')">Tramitar siniestro</button>
+        <div class="quick-questions" id="quickQuestionsContainer">
+            <h3>Preguntas frecuentes:</h3>
+            <div class="quick-questions-list" id="quickQuestionsList">
+                <!-- Se llena dinámicamente -->
             </div>
         </div>
 
@@ -476,55 +405,126 @@
                     onkeypress="handleKeyPress(event)"
                 >
                 <button class="send-button" id="sendButton" onclick="sendMessage()">
-                    <span>Enviar</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
+                    Enviar
                 </button>
             </div>
         </div>
     </div>
 
     <script>
+        // Configuración de los bots
+        // Un solo webhook, el campo "bot" determina qué documentos y prompt usar
         const WEBHOOK_URL = 'https://webhook-processor-aeup-production.up.railway.app/webhook/asisa-chat';
+
+        const BOTS = {
+            hogar: {
+                webhook: WEBHOOK_URL,
+                botParam: 'hogar',
+                title: '🏠 ASISA Hogar',
+                subtitle: 'Asistente de Seguros de Hogar',
+                welcomeMessage: '¡Hola! Soy el asistente de ASISA para seguros de hogar. Puedo ayudarte con información sobre nuestros productos: Casero, Inquilino y Propietario (versiones Básica y Completa), así como criterios de tramitación. ¿En qué puedo ayudarte?',
+                quickQuestions: [
+                    { label: 'Productos disponibles', question: '¿Qué productos de seguro de hogar ofrece ASISA?' },
+                    { label: 'Casero Básico vs Completo', question: '¿Cuál es la diferencia entre Casero Básico y Casero Completo?' },
+                    { label: 'Inquilino vs Propietario', question: '¿Cuál es la diferencia entre el seguro de Inquilino y el de Propietario?' },
+                    { label: 'Criterios tramitación', question: '¿Cuáles son los criterios de tramitación de siniestros?' }
+                ],
+                badgeClass: 'hogar'
+            },
+            venta: {
+                webhook: WEBHOOK_URL,
+                botParam: 'venta',
+                title: '💼 ASISA Venta',
+                subtitle: 'Asistente para Equipo Comercial',
+                welcomeMessage: '¡Hola! Soy el asistente de ventas de ASISA. Estoy aquí para ayudarte con argumentarios de producto, ventajas competitivas y estrategias para vender nuestros seguros de hogar. ¿Qué necesitas?',
+                quickQuestions: [
+                    { label: 'Argumentarios', question: '¿Cuáles son los principales argumentos de venta de ASISA Hogar?' },
+                    { label: 'Ventajas competitivas', question: '¿Qué ventajas tiene ASISA frente a la competencia?' },
+                    { label: 'Objeciones comunes', question: '¿Cómo responder a las objeciones más comunes de los clientes?' },
+                    { label: 'Público objetivo', question: '¿Cuál es el público objetivo de cada producto y cómo abordarlo?' }
+                ],
+                badgeClass: 'venta'
+            }
+        };
+
+        let currentBot = 'hogar';
         let conversationHistory = [];
+
+        function switchBot(botType) {
+            if (currentBot === botType) return;
+
+            currentBot = botType;
+            conversationHistory = [];
+
+            const bot = BOTS[botType];
+            const body = document.body;
+            const header = document.getElementById('chatHeader');
+            const btnHogar = document.getElementById('btnHogar');
+            const btnVenta = document.getElementById('btnVenta');
+
+            // Update body class
+            if (botType === 'venta') {
+                body.classList.add('venta');
+                header.classList.add('venta');
+            } else {
+                body.classList.remove('venta');
+                header.classList.remove('venta');
+            }
+
+            // Update buttons
+            btnHogar.classList.toggle('active', botType === 'hogar');
+            btnVenta.classList.toggle('active', botType === 'venta');
+
+            // Update header
+            document.getElementById('botTitle').textContent = bot.title;
+            document.getElementById('botSubtitle').textContent = bot.subtitle;
+
+            // Clear and add welcome message
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = `
+                <div class="message bot">
+                    <div class="message-content">
+                        <span class="bot-badge ${bot.badgeClass}">Bot ${botType === 'hogar' ? 'Hogar' : 'Venta'}</span><br>
+                        ${bot.welcomeMessage}
+                    </div>
+                </div>
+            `;
+
+            // Update quick questions
+            updateQuickQuestions(botType);
+
+            // Focus input
+            document.getElementById('messageInput').focus();
+        }
+
+        function updateQuickQuestions(botType) {
+            const bot = BOTS[botType];
+            const container = document.getElementById('quickQuestionsList');
+            container.innerHTML = bot.quickQuestions.map(q =>
+                `<button class="quick-question" onclick="sendQuickQuestion('${q.question}')">${q.label}</button>`
+            ).join('');
+        }
 
         function addMessage(content, isUser) {
             const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
 
-            if (!isUser) {
-                const avatar = document.createElement('div');
-                avatar.className = 'message-avatar';
-                avatar.textContent = 'A';
-                messageDiv.appendChild(avatar);
-            }
-
             const messageContent = document.createElement('div');
             messageContent.className = 'message-content';
-            messageContent.innerHTML = formatMessage(content);
 
-            messageDiv.appendChild(messageContent);
-
-            if (isUser) {
-                const avatar = document.createElement('div');
-                avatar.className = 'message-avatar';
-                avatar.textContent = 'Tú';
-                messageDiv.appendChild(avatar);
+            if (!isUser) {
+                const bot = BOTS[currentBot];
+                messageContent.innerHTML = `<span class="bot-badge ${bot.badgeClass}">Bot ${currentBot === 'hogar' ? 'Hogar' : 'Venta'}</span><br>${content.replace(/\n/g, '<br>')}`;
+            } else {
+                messageContent.innerHTML = content.replace(/\n/g, '<br>');
             }
 
+            messageDiv.appendChild(messageContent);
             messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
 
-        function formatMessage(content) {
-            // Convert markdown-style formatting
-            return content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\n/g, '<br>')
-                .replace(/- /g, '• ');
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
         function showTypingIndicator() {
@@ -532,11 +532,6 @@
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot';
             typingDiv.id = 'typingIndicator';
-
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = 'A';
-            typingDiv.appendChild(avatar);
 
             const typingContent = document.createElement('div');
             typingContent.className = 'typing-indicator active';
@@ -573,23 +568,28 @@
 
             if (!message) return;
 
+            // Disable input
             input.disabled = true;
             sendButton.disabled = true;
 
+            // Add user message
             addMessage(message, true);
             input.value = '';
 
+            // Show typing indicator
             showTypingIndicator();
 
             try {
-                const response = await fetch(WEBHOOK_URL, {
+                const bot = BOTS[currentBot];
+                const response = await fetch(bot.webhook, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         message: message,
-                        history: conversationHistory
+                        history: conversationHistory,
+                        bot: bot.botParam
                     })
                 });
 
@@ -599,14 +599,19 @@
 
                 const data = await response.json();
 
+                // Hide typing indicator
                 hideTypingIndicator();
+
+                // Add bot response
                 addMessage(data.response, false);
 
+                // Update conversation history
                 conversationHistory.push({
                     user: message,
                     bot: data.response
                 });
 
+                // Keep only last 5 exchanges
                 if (conversationHistory.length > 5) {
                     conversationHistory = conversationHistory.slice(-5);
                 }
@@ -616,6 +621,7 @@
                 console.error('Error:', error);
                 showError('Lo siento, hubo un error al procesar tu mensaje. Por favor intenta de nuevo.');
             } finally {
+                // Re-enable input
                 input.disabled = false;
                 sendButton.disabled = false;
                 input.focus();
@@ -634,7 +640,9 @@
             }
         }
 
+        // Initialize on load
         window.onload = () => {
+            updateQuickQuestions('hogar');
             document.getElementById('messageInput').focus();
         };
     </script>
